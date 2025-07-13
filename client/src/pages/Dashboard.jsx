@@ -34,6 +34,16 @@ export default function Dashboard() {
       >
         Logout
       </button>
+      <button
+        onClick={() => {
+          localStorage.removeItem("token");
+          localStorage.removeItem("email");
+          window.location.href = "/login";
+        }}
+        className="text-sm text-blue-300 underline"
+      >
+        Logout
+      </button>
     </div>
   );
 }

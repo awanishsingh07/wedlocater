@@ -1,4 +1,37 @@
+import { useState } from "react";
+import { motion } from "framer-motion";
+
 export default function Venues() {
+  const [search, setSearch] = useState("");
+
+  const handleBook = async (venue) => {
+    console.log("Booking venue:", venue); // ✅ Add this
+
+    const userEmail = localStorage.getItem("email");
+    if (!userEmail) {
+      alert("Please login first!");
+      return;
+    }
+
+    const res = await fetch("http://localhost:5000/api/book", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userEmail,
+        venueId: venue._id,
+        venueName: venue.name,
+      }),
+    });
+
+    const data = await res.json();
+    console.log("Booking response:", data);
+    if (data.status === "ok") {
+      alert("Booking successful!");
+    } else {
+      alert("Booking failed: " + data.error);
+    }
+  };
+
   const sampleVenues = [
     {
       id: 1,
@@ -49,7 +82,7 @@ export default function Venues() {
       price: "₹5,00,000",
     },
     {
-      id: 10,
+      id: 7,
       name: "Golden Leaf Retreat",
       location: "Shimla, Himachal Pradesh",
       image:
@@ -57,7 +90,7 @@ export default function Venues() {
       price: "₹3,00,000",
     },
     {
-      id: 11,
+      id: 8,
       name: "Amber Gardens",
       location: "Hyderabad, Telangana",
       image:
@@ -65,7 +98,7 @@ export default function Venues() {
       price: "₹2,20,000",
     },
     {
-      id: 12,
+      id: 9,
       name: "Pearl Lagoon Venue",
       location: "Pune, Maharashtra",
       image:
@@ -74,31 +107,58 @@ export default function Venues() {
     },
   ];
 
+  // 🔍 Filter venues based on search
+  const filteredVenues = sampleVenues.filter((venue) =>
+    (venue.name + venue.location).toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
-    <div className="min-h-screen bg-blue-900 text-white p-8">
-      <h1 className="text-4xl font-bold text-center mb-10">Wedding Venues</h1>
+    <div className="min-h-screen bg-blue-900 text-white p-6 sm:p-10">
+      <h1 className="text-4xl font-bold text-center mb-6">Wedding Venues</h1>
+
+      <div className="flex justify-center mb-8">
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search venue or location..."
+          className="w-full sm:w-1/2 px-4 py-2 rounded bg-blue-800 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sampleVenues.map((venue) => (
-          <div
-            key={venue.id}
-            className="bg-blue-800 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition"
-          >
-            <img
-              src={venue.image}
-              alt={venue.name}
-              className="h-48 w-full object-cover"
-            />
-            <div className="p-4">
-              <h2 className="text-2xl font-semibold">{venue.name}</h2>
-              <p className="text-sm text-blue-200">{venue.location}</p>
-              <p className="mt-2 font-bold">{venue.price}</p>
-              <button className="mt-4 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded">
-                Book Now
-              </button>
-            </div>
-          </div>
-        ))}
+        {filteredVenues.length > 0 ? (
+          filteredVenues.map((venue) => (
+            <motion.div
+              key={venue.id}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4 }}
+              className="bg-blue-800 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl hover:scale-[1.02] transition-all duration-300"
+            >
+              <img
+                src={venue.image}
+                alt={venue.name}
+                className="h-48 w-full object-cover"
+              />
+              <div className="p-4">
+                <h2 className="text-2xl font-semibold">{venue.name}</h2>
+                <p className="text-sm text-blue-200">{venue.location}</p>
+                <p className="mt-2 font-bold">{venue.price}</p>
+                <button
+                  onClick={() => handleBook(venue)}
+                  className="mt-4 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                  Book Now
+                </button>
+              </div>
+            </motion.div>
+          ))
+        ) : (
+          <p className="text-center col-span-3 text-blue-200">
+            No venues found.
+          </p>
+        )}
       </div>
     </div>
   );
