@@ -18,7 +18,7 @@ export default function Venues() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         userEmail,
-        venueId: venue._id,
+        venueId: venue.id,
         venueName: venue.name,
       }),
     });
@@ -113,7 +113,7 @@ export default function Venues() {
   );
 
   return (
-    <div className="min-h-screen bg-blue-900 text-white p-6 sm:p-10">
+    <div className="min-h-screen pt-24 px-4 bg-blue-950 text-white sm:px-10">
       <h1 className="text-4xl font-bold text-center mb-6">Wedding Venues</h1>
 
       <div className="flex justify-center mb-8">

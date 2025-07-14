@@ -1,34 +1,46 @@
-// routes/bookingRoutes.js
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
+const Booking = require("../models/Booking");
 
-// Booking model schema
-const bookingSchema = new mongoose.Schema({
-  userEmail: String,
-  venueId: String,
-  venueName: String,
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+// Get bookings by user email
+router.get("/my-bookings", async (req, res) => {
+  const { email } = req.query;
+  if (!email)
+    return res.status(400).json({ status: "error", error: "Email required" });
+
+  try {
+    const bookings = await Booking.find({ userEmail: email });
+    res.json({ status: "ok", bookings });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ status: "error", error: "Failed to fetch bookings" });
+  }
 });
 
-const Booking = mongoose.model("Booking", bookingSchema);
-
-// POST /api/book
 router.post("/book", async (req, res) => {
   const { userEmail, venueId, venueName } = req.body;
 
-  if (!userEmail || !venueId || !venueName) {
-    return res.status(400).json({ status: "error", error: "Missing data" });
-  }
-
   try {
+    console.log("📥 Booking request received:", req.body);
+
     await Booking.create({ userEmail, venueId, venueName });
-    res.json({ status: "ok", message: "Booking successful!" });
+
+    console.log("✅ Booking saved!");
+    res.json({ status: "ok" });
   } catch (err) {
-    res.status(500).json({ status: "error", error: err.message });
+    console.error("❌ Booking failed:", err.message);
+    res.json({ status: "error", error: err.message });
+  }
+});
+
+// Cancel booking by ID
+router.delete("/bookings/:id", async (req, res) => {
+  try {
+    await Booking.findByIdAndDelete(req.params.id);
+    res.json({ status: "ok", message: "Booking cancelled" });
+  } catch (err) {
+    res.json({ status: "error", error: "Failed to cancel booking" });
   }
 });
 
