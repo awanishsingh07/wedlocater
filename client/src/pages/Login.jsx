@@ -17,17 +17,22 @@ export default function Login() {
     const res = await fetch("http://localhost:5000/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify({ email: form.email, password: form.password }),
     });
-    console.log("Sending:", form);
 
     const data = await res.json();
     console.log("Received:", data);
     if (data.status === "ok") {
-      toast.success("Login successful!");
       localStorage.setItem("token", data.token);
-      localStorage.setItem("email", form.email);
-      setTimeout(() => navigate("/dashboard"), 1500);
+      localStorage.setItem("email", data.email);
+      localStorage.setItem("role", data.role);
+      toast.success("Login successful!");
+      const role = data.role;
+      if (role == "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
     } else {
       toast.error(data.error || "Invalid email or password.");
     }

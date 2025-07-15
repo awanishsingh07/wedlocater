@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Booking = require("../models/Booking");
+const { requireAdmin } = require("../middlewares/auth");
 
 // Get bookings by user email
 router.get("/my-bookings", async (req, res) => {
@@ -45,7 +46,7 @@ router.delete("/bookings/:id", async (req, res) => {
 });
 
 // Get all bookings - Admin use
-router.get("/admin/bookings", async (req, res) => {
+router.get("/admin/bookings", requireAdmin, async (req, res) => {
   try {
     const bookings = await Booking.find();
     res.json({ status: "ok", bookings });

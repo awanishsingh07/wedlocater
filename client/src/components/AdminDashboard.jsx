@@ -7,7 +7,13 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     const fetchBookings = async () => {
-      const res = await fetch("http://localhost:5000/api/admin/bookings");
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:5000/api/admin/bookings", {
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ Add Authorization header
+        },
+      });
+
       const data = await res.json();
       if (data.status === "ok") {
         setBookings(data.bookings);
