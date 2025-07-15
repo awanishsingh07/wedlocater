@@ -44,4 +44,16 @@ router.delete("/bookings/:id", async (req, res) => {
   }
 });
 
+// Get all bookings - Admin use
+router.get("/admin/bookings", async (req, res) => {
+  try {
+    const bookings = await Booking.find();
+    res.json({ status: "ok", bookings });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ status: "error", error: "Failed to fetch bookings" });
+  }
+});
+
 module.exports = router;
