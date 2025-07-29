@@ -1,47 +1,33 @@
+// Dashboard.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
-  const [user, setUser] = useState({ email: "", role: "" });
+  const [name, setName] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const email = localStorage.getItem("email");
-    const role = localStorage.getItem("role");
-    console.log("User role:", role);
+    const storedName = localStorage.getItem("name");
+    setName(storedName);
+  }, []);
 
-    if (!token || !email) {
-      navigate("/login");
-      return;
-    }
-
-    setUser({ email, role });
-  }, [navigate]);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("email");
-    localStorage.removeItem("role");
-    navigate("/login");
+  const handleViewBookings = () => {
+    navigate("/my-bookings");
   };
 
   return (
     <div className="min-h-screen pt-24 px-4 bg-blue-950 text-white sm:px-10">
-      <h1 className="text-4xl font-bold text-center mb-6">Dashboard</h1>
-      <p className="text-lg text-center mb-4">
-        Welcome, <span className="font-semibold">{user.email}</span>
-      </p>
-      <p className="text-center text-blue-300 mb-8">
-        Role: {user.role || "user"}
-      </p>
+      <h1 className="text-4xl font-bold text-center mb-6">
+        Welcome {name} (user)
+      </h1>
 
-      <div className="flex justify-center">
+      <div className="text-center">
+        <p className="mb-4 text-lg">You can view your bookings below.</p>
         <button
-          onClick={handleLogout}
-          className="bg-red-600 hover:bg-red-500 px-6 py-2 rounded text-white"
+          onClick={handleViewBookings}
+          className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded text-white font-semibold"
         >
-          Logout
+          View My Bookings
         </button>
       </div>
     </div>

@@ -11,12 +11,12 @@ export default function MyBookings() {
     try {
       const email = localStorage.getItem("email");
       const res = await fetch(
-        `http://localhost:5000/api/my-bookings?email=${email}`
+        `http://localhost:5000/api/bookings/my-bookings?email=${email}`
       );
 
       if (!res.ok) {
         const html = await res.text();
-        console.error("❌ HTML Error Response:", html);
+        console.error("HTML Error Response:", html);
         throw new Error("Failed to fetch bookings");
       }
 

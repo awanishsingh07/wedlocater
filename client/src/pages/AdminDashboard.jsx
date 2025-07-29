@@ -1,46 +1,53 @@
+// AdminDashboard.jsx
 import { useEffect, useState } from "react";
 
 export default function AdminDashboard() {
+  const [name, setName] = useState("");
   const [bookings, setBookings] = useState([]);
-  const [filteredBookings, setFilteredBookings] = useState([]);
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    const fetchBookings = async () => {
-      const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/admin/bookings", {
-        headers: {
-          Authorization: `Bearer ${token}`, // ✅ Add Authorization header
-        },
-      });
+  const token = localStorage.getItem("token");
 
-      const data = await res.json();
-      if (data.status === "ok") {
-        setBookings(data.bookings);
-        setFilteredBookings(data.bookings);
-      } else {
-        alert("Error fetching bookings");
+  useEffect(() => {
+    const storedName = localStorage.getItem("name");
+    setName(storedName);
+
+    const fetchAdminBookings = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:5000/api/bookings/admin/bookings",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await res.json();
+        if (data.status === "ok") {
+          setBookings(data.bookings);
+        } else {
+          console.error("Admin booking fetch failed");
+        }
+      } catch (err) {
+        console.error("Admin fetch error:", err);
       }
     };
-    fetchBookings();
-  }, []);
 
-  // Filter bookings when search input changes
-  useEffect(() => {
-    const query = search.toLowerCase();
-    const results = bookings.filter(
-      (b) =>
-        b.userEmail.toLowerCase().includes(query) ||
-        b.venueName.toLowerCase().includes(query)
-    );
-    setFilteredBookings(results);
-  }, [search, bookings]);
+    fetchAdminBookings();
+  }, [token]);
+
+  const filteredBookings = bookings.filter(
+    (b) =>
+      b.userEmail.toLowerCase().includes(search.toLowerCase()) ||
+      b.venueName.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen pt-24 px-4 bg-blue-950 text-white sm:px-10">
-      <h1 className="text-4xl font-bold text-center mb-6">Admin Dashboard</h1>
+      <h1 className="text-4xl font-bold text-center mb-6">
+        Welcome {name} (admin)
+      </h1>
 
-      {/* Search Bar */}
       <div className="mb-6 flex justify-center">
         <input
           type="text"

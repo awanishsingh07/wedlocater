@@ -5,6 +5,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
+  const role = localStorage.getItem("role");
 
   const handleLogout = () => {
     localStorage.clear();
@@ -22,32 +23,42 @@ export default function Navbar() {
           <button onClick={() => setMenuOpen(!menuOpen)}>☰</button>
         </div>
 
-        <div className="hidden sm:flex space-x-6">
+        {/* 🌐 Desktop Links */}
+        <div className="hidden sm:flex space-x-6 items-center">
           <Link to="/venues">Venues</Link>
-          <Link to="/my-bookings">My Bookings</Link>
           <Link to="/dashboard">Dashboard</Link>
+          {/* ✅ Show only for users */}
+          {role === "user" && <Link to="/my-bookings">My Bookings</Link>}
           {email ? (
-            <button onClick={handleLogout}>Logout</button>
+            <button onClick={handleLogout} className="hover:text-red-300">
+              Logout
+            </button>
           ) : (
             <Link to="/login">Login</Link>
           )}
         </div>
       </div>
 
-      {/* Mobile Dropdown */}
+      {/* 📱 Mobile Dropdown */}
       {menuOpen && (
-        <div className="sm:hidden bg-blue-800 px-4 pb-4">
+        <div className="sm:hidden bg-blue-800 px-4 pb-4 space-y-2">
           <Link to="/venues" className="block py-1">
             Venues
-          </Link>
-          <Link to="/my-bookings" className="block py-1">
-            My Bookings
           </Link>
           <Link to="/dashboard" className="block py-1">
             Dashboard
           </Link>
+          {/* ✅ Show only for users */}
+          {role === "user" && (
+            <Link to="/my-bookings" className="block py-1">
+              My Bookings
+            </Link>
+          )}
           {email ? (
-            <button onClick={handleLogout} className="w-full text-left py-1">
+            <button
+              onClick={handleLogout}
+              className="w-full text-left py-1 hover:text-red-300"
+            >
               Logout
             </button>
           ) : (

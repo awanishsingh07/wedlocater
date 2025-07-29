@@ -1,15 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const User = require("./models/User");
-const userRoutes = require("./routes/UserRoutes");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use("/api", userRoutes);
 
 // MongoDB connect
 mongoose.connect("mongodb://localhost:27017/wedlocater", {
@@ -17,11 +12,14 @@ mongoose.connect("mongodb://localhost:27017/wedlocater", {
   useUnifiedTopology: true,
 });
 
-// 👇 Add this line to use booking routes
+// 🔀 Routes
+const userRoutes = require("./routes/UserRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
-app.use("/api", bookingRoutes);
+
+app.use("/api/users", userRoutes); // e.g. /api/users/login
+app.use("/api/bookings", bookingRoutes); // e.g. /api/bookings/user
 
 // Server start
 app.listen(5000, () => {
-  console.log("Server running on http://localhost:5000");
+  console.log("🚀 Server running at http://localhost:5000");
 });
