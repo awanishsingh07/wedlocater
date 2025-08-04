@@ -50,7 +50,7 @@ export default function Register() {
             placeholder="Full Name"
             value={form.name}
             onChange={handleChange}
-            className="w-full p-3 rounded border border-[#d8c5b1] focus:outline-none focus:ring-2 focus:ring-[#b28a64] placeholder-gray-500"
+            className="w-full p-3 rounded border border-[#d8c5b1] focus:outline-none focus:ring-2 focus:ring-[#b28a64] placeholder-gray-500 text-[#3e3e3e]"
             required
           />
 
@@ -60,7 +60,7 @@ export default function Register() {
             placeholder="Email"
             value={form.email}
             onChange={handleChange}
-            className="w-full p-3 rounded border border-[#d8c5b1] focus:outline-none focus:ring-2 focus:ring-[#b28a64] placeholder-gray-500"
+            className="w-full p-3 rounded border border-[#d8c5b1] focus:outline-none focus:ring-2 focus:ring-[#b28a64] placeholder-gray-500 text-[#3e3e3e]"
             required
           />
 
@@ -71,7 +71,7 @@ export default function Register() {
               placeholder="Password"
               value={form.password}
               onChange={handleChange}
-              className="w-full p-3 rounded border border-[#d8c5b1] focus:outline-none focus:ring-2 focus:ring-[#b28a64] placeholder-gray-500"
+              className="w-full p-3 rounded border border-[#d8c5b1] focus:outline-none focus:ring-2 focus:ring-[#b28a64] placeholder-gray-500 text-[#3e3e3e]"
               required
             />
             <button

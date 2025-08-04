@@ -4,21 +4,25 @@ const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
 
   const fetchBookings = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return console.error("No token found in localStorage");
+
     try {
-      const response = await fetch("http://localhost:5000/api/bookings/user", {
+      const res = await fetch("http://localhost:5000/api/bookings/user", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
+          "content-type": "application/json",
         },
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch bookings");
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
       }
 
-      const data = await response.json();
-      setBookings(data);
-    } catch (error) {
-      console.error("Error fetching bookings:", error);
+      const data = await res.json();
+      setBookings(data.bookings);
+    } catch (err) {
+      console.error("Error fetching bookings:", err);
     }
   };
 
@@ -27,37 +31,29 @@ const MyBookings = () => {
   }, []);
 
   return (
-    <div className="pt-20 min-h-screen bg-[#fefdfb] text-gray-800 px-4">
-      <h2 className="text-3xl font-semibold text-center mb-10 text-[#b28a64]">
+    <div className="min-h-screen pt-24 px-4 bg-[#fdf8f5]">
+      <h2 className="text-3xl font-semibold text-center mb-8 text-[#b28a64]">
         My Bookings
       </h2>
 
       {bookings.length === 0 ? (
         <p className="text-center text-gray-500">No bookings found.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {bookings.map((booking) => (
             <div
               key={booking._id}
-              className="bg-white rounded-2xl border border-[#e6dccf] shadow-sm p-6 hover:shadow-md transition duration-300"
+              className="bg-white shadow-lg rounded-2xl p-6 border border-[#e6dcd3]"
             >
-              <h3 className="text-xl font-semibold mb-2 text-[#b28a64]">
+              <h3 className="text-xl font-bold text-[#b28a64]">
                 {booking.venueName}
               </h3>
-              <p>
-                <span className="font-medium">Date:</span>{" "}
-                {new Date(booking.date).toLocaleDateString()}
+              <p className="text-sm text-gray-600">
+                Date: {new Date(booking.date).toLocaleDateString()}
               </p>
-              <p>
-                <span className="font-medium">Time:</span> {booking.time}
-              </p>
-              <p>
-                <span className="font-medium">Location:</span>{" "}
-                {booking.location}
-              </p>
-              <p>
-                <span className="font-medium">Status:</span>{" "}
-                <span className="text-green-600 font-semibold">Confirmed</span>
+              <p className="text-sm text-gray-600">Time: {booking.timeSlot}</p>
+              <p className="text-sm text-gray-600">
+                Status: <span className="font-semibold">{booking.status}</span>
               </p>
             </div>
           ))}

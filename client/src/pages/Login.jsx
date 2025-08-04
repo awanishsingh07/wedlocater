@@ -26,7 +26,7 @@ export default function Login() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("email", data.email);
       localStorage.setItem("role", data.role);
-      toast.success("Login successful!");
+      //toast.success("Login successful!");
       navigate(data.role === "admin" ? "/admin" : "/dashboard");
     } else {
       toast.error(data.error || "Invalid email or password.");
@@ -47,7 +47,7 @@ export default function Login() {
             placeholder="Email"
             value={form.email}
             onChange={handleChange}
-            className="w-full p-3 rounded border border-[#d8c5b1] focus:outline-none focus:ring-2 focus:ring-[#b28a64] placeholder-gray-500"
+            className="w-full p-3 rounded border border-[#d8c5b1] focus:outline-none focus:ring-2 focus:ring-[#b28a64] placeholder-gray-500 text-[#3e3e3e]"
             required
           />
 
@@ -58,7 +58,7 @@ export default function Login() {
               placeholder="Password"
               value={form.password}
               onChange={handleChange}
-              className="w-full p-3 rounded border border-[#d8c5b1] focus:outline-none focus:ring-2 focus:ring-[#b28a64] placeholder-black-500"
+              className="w-full p-3 rounded border border-[#d8c5b1] focus:outline-none focus:ring-2 focus:ring-[#b28a64] placeholder-gray-500 text-[#3e3e3e]"
               required
             />
             <button
