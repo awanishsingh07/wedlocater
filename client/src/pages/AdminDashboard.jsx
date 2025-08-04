@@ -43,7 +43,7 @@ export default function AdminDashboard() {
   );
 
   return (
-    <div className="min-h-screen pt-24 px-4 bg-blue-950 text-white sm:px-10">
+    <div className="min-h-screen pt-24 px-4 sm:px-10 bg-[#fefdfb] text-[#5a4637] font-serif">
       <h1 className="text-4xl font-bold text-center mb-6">
         Welcome {name} (admin)
       </h1>
@@ -54,14 +54,14 @@ export default function AdminDashboard() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by user email or venue name..."
-          className="w-full sm:w-1/2 px-4 py-2 rounded bg-blue-800 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full sm:w-1/2 px-4 py-2 rounded border border-[#b28a64] bg-white placeholder-[#b28a64] focus:outline-none focus:ring-2 focus:ring-[#b28a64]"
         />
       </div>
 
-      <div className="overflow-x-auto bg-blue-800 p-4 rounded-lg">
+      <div className="overflow-x-auto bg-white p-4 rounded-lg shadow-md border border-[#b28a64]">
         <table className="w-full text-left">
           <thead>
-            <tr className="bg-blue-700 text-white">
+            <tr className="bg-[#b28a64] text-white">
               <th className="p-3">User Email</th>
               <th className="p-3">Venue Name</th>
               <th className="p-3">Booking ID</th>
@@ -72,7 +72,7 @@ export default function AdminDashboard() {
             {filteredBookings.map((booking, idx) => (
               <tr
                 key={idx}
-                className="border-t border-blue-600 hover:bg-blue-700"
+                className="border-t border-[#e0d1c3] hover:bg-[#f6eee6]"
               >
                 <td className="p-3">{booking.userEmail}</td>
                 <td className="p-3">{booking.venueName}</td>
@@ -84,8 +84,9 @@ export default function AdminDashboard() {
             ))}
           </tbody>
         </table>
+
         {filteredBookings.length === 0 && (
-          <p className="text-center text-blue-300 mt-4">No bookings found.</p>
+          <p className="text-center text-[#b28a64] mt-4">No bookings found.</p>
         )}
       </div>
     </div>

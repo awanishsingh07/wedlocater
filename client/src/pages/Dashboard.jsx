@@ -1,4 +1,3 @@
-// Dashboard.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -16,8 +15,8 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen pt-24 px-4 bg-blue-950 text-white sm:px-10">
-      <h1 className="text-4xl font-bold text-center mb-6">
+    <div className="min-h-screen pt-24 px-4 sm:px-10 bg-[#fefdfb] text-[#5a4637] font-serif">
+      <h1 className="text-4xl font-bold text-center mb-6 text-[#b28a64]">
         Welcome {name} (user)
       </h1>
 
@@ -25,7 +24,7 @@ export default function Dashboard() {
         <p className="mb-4 text-lg">You can view your bookings below.</p>
         <button
           onClick={handleViewBookings}
-          className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded text-white font-semibold"
+          className="bg-[#b28a64] hover:bg-[#9a7356] px-6 py-2 rounded-full text-white font-semibold shadow transition"
         >
           View My Bookings
         </button>

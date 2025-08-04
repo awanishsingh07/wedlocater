@@ -1,11 +1,13 @@
-// server/models/Venue.js
 const mongoose = require("mongoose");
 
 const venueSchema = new mongoose.Schema({
   name: String,
   location: String,
-  image: String,
-  price: String,
+  pricePerDay: Number,
+  description: String,
+  imageUrl: String,
 });
 
-module.exports = mongoose.model("Venue", venueSchema);
+const Venue = mongoose.model("Venue", venueSchema);
+
+module.exports = Venue;

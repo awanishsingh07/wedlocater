@@ -1,25 +1,32 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
+const dotenv = require("dotenv");
+const connectDB = require("./config/db");
+
+// Load environment variables from .env
+dotenv.config();
+
+// Connect to MongoDB
+connectDB();
 
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// MongoDB connect
-mongoose.connect("mongodb://localhost:27017/wedlocater", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+// Routes
+app.use("/api/venues", require("./routes/venueRoutes"));
+app.use("/api/users", require("./routes/UserRoutes"));
+app.use("/api/bookings", require("./routes/bookingRoutes"));
+
+// Default route
+app.get("/", (req, res) => {
+  res.send("API is running...");
 });
 
-// 🔀 Routes
-const userRoutes = require("./routes/UserRoutes");
-const bookingRoutes = require("./routes/bookingRoutes");
-
-app.use("/api/users", userRoutes); // e.g. /api/users/login
-app.use("/api/bookings", bookingRoutes); // e.g. /api/bookings/user
-
-// Server start
-app.listen(5000, () => {
-  console.log("🚀 Server running at http://localhost:5000");
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });

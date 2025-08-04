@@ -1,153 +1,120 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 export default function Venues() {
   const [search, setSearch] = useState("");
+  const [venues, setVenues] = useState([]);
+  const [userBookings, setUserBookings] = useState([]);
 
+  const userEmail = localStorage.getItem("email");
+
+  // Fetch venues and user bookings
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const venuesRes = await fetch("http://localhost:5000/api/venues/all");
+        const venuesData = await venuesRes.json();
+        setVenues(venuesData.venues || []);
+
+        if (userEmail) {
+          const bookingsRes = await fetch(
+            `http://localhost:5000/api/bookings/user/${userEmail}`
+          );
+          const bookingsData = await bookingsRes.json();
+          setUserBookings(bookingsData.bookings || []);
+        }
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    fetchData();
+  }, [userEmail]);
+
+  // Filter out already booked venues
+  const bookedVenueIds = new Set(userBookings.map((b) => b.venueId));
+  const availableVenues = venues.filter(
+    (venue) => !bookedVenueIds.has(venue._id)
+  );
+
+  // Apply search filter
+  const filteredVenues = availableVenues.filter((venue) =>
+    (venue.name + venue.location).toLowerCase().includes(search.toLowerCase())
+  );
+
+  // Handle booking
   const handleBook = async (venue) => {
-    console.log("Booking venue:", venue); // ✅ Add this
-
-    const userEmail = localStorage.getItem("email");
     if (!userEmail) {
       alert("Please login first!");
       return;
     }
 
-    const res = await fetch("http://localhost:5000/api/bookings/book", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userEmail,
-        venueId: venue.id,
-        venueName: venue.name,
-      }),
-    });
+    try {
+      const res = await fetch("http://localhost:5000/api/bookings/book", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userEmail,
+          venueId: venue._id,
+          venueName: venue.name,
+        }),
+      });
 
-    const data = await res.json();
-    console.log("Booking response:", data);
-    if (data.status === "ok") {
-      alert("Booking successful!");
-    } else {
-      alert("Booking failed: " + data.error);
+      const data = await res.json();
+      if (data.status === "ok") {
+        alert("🎉 Booking successful!");
+        setUserBookings([...userBookings, { venueId: venue._id }]);
+      } else {
+        alert("❌ Booking failed: " + data.error);
+      }
+    } catch (err) {
+      console.error("Booking error:", err);
+      alert("An error occurred while booking.");
     }
   };
 
-  const sampleVenues = [
-    {
-      id: 1,
-      name: "Royal Palace Banquet",
-      location: "Bhopal, MP",
-      image:
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=60",
-      price: "₹1,50,000",
-    },
-    {
-      id: 2,
-      name: "Elegant Garden View",
-      location: "Indore, MP",
-      image:
-        "https://images.unsplash.com/photo-1573164574572-cb89e39749b4?auto=format&fit=crop&w=800&q=60",
-      price: "₹2,00,000",
-    },
-    {
-      id: 3,
-      name: "Ocean View Resort",
-      location: "Goa, India",
-      image:
-        "https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=800&q=60",
-      price: "₹3,50,000",
-    },
-    {
-      id: 4,
-      name: "The Rajputana Heritage",
-      location: "Jaipur, Rajasthan",
-      image:
-        "https://images.unsplash.com/photo-1571501679680-de32f1e7aad4?auto=format&fit=crop&w=800&q=60",
-      price: "₹4,20,000",
-    },
-    {
-      id: 5,
-      name: "Palm Beach Lawn",
-      location: "Kochi, Kerala",
-      image:
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=60",
-      price: "₹2,80,000",
-    },
-    {
-      id: 6,
-      name: "Lake View Palace",
-      location: "Udaipur, Rajasthan",
-      image:
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=60",
-      price: "₹5,00,000",
-    },
-    {
-      id: 7,
-      name: "Golden Leaf Retreat",
-      location: "Shimla, Himachal Pradesh",
-      image:
-        "https://images.unsplash.com/photo-1578898886181-b44e35c27931?auto=format&fit=crop&w=800&q=60",
-      price: "₹3,00,000",
-    },
-    {
-      id: 8,
-      name: "Amber Gardens",
-      location: "Hyderabad, Telangana",
-      image:
-        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=60",
-      price: "₹2,20,000",
-    },
-    {
-      id: 9,
-      name: "Pearl Lagoon Venue",
-      location: "Pune, Maharashtra",
-      image:
-        "https://images.unsplash.com/photo-1549237515-1f0b9c879c4e?auto=format&fit=crop&w=800&q=60",
-      price: "₹2,60,000",
-    },
-  ];
-
-  // 🔍 Filter venues based on search
-  const filteredVenues = sampleVenues.filter((venue) =>
-    (venue.name + venue.location).toLowerCase().includes(search.toLowerCase())
-  );
-
   return (
-    <div className="min-h-screen pt-24 px-4 bg-blue-950 text-white sm:px-10">
-      <h1 className="text-4xl font-bold text-center mb-6">Wedding Venues</h1>
+    <div className="min-h-screen pt-24 px-4 bg-gradient-to-br from-[#F5F1EB] to-[#EADBC8] text-[#3B2F2F] font-serif sm:px-10">
+      <h1 className="text-4xl font-bold text-center mb-8 text-[#A67B5B]">
+        Wedding Venues
+      </h1>
 
-      <div className="flex justify-center mb-8">
+      <div className="flex justify-center mb-10">
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search venue or location..."
-          className="w-full sm:w-1/2 px-4 py-2 rounded bg-blue-800 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full sm:w-1/2 px-4 py-3 rounded-full bg-white text-[#5A4637] placeholder-[#A67B5B] border border-[#D6C3B4] focus:outline-none focus:ring-2 focus:ring-[#A67B5B]"
         />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredVenues.length > 0 ? (
           filteredVenues.map((venue) => (
             <motion.div
-              key={venue.id}
-              initial={{ opacity: 0, scale: 0.9 }}
+              key={venue._id}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4 }}
-              className="bg-blue-800 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl hover:scale-[1.02] transition-all duration-300"
+              className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition duration-300 border border-[#E0D3C2]"
             >
               <img
-                src={venue.image}
+                src={venue.image || "/placeholder.jpg"}
                 alt={venue.name}
                 className="h-48 w-full object-cover"
               />
-              <div className="p-4">
-                <h2 className="text-2xl font-semibold">{venue.name}</h2>
-                <p className="text-sm text-blue-200">{venue.location}</p>
-                <p className="mt-2 font-bold">{venue.price}</p>
+              <div className="p-5">
+                <h2 className="text-xl font-semibold text-[#3B2F2F]">
+                  {venue.name}
+                </h2>
+                <p className="text-sm text-[#7A6452]">{venue.location}</p>
+                <p className="mt-2 font-bold text-[#A67B5B]">
+                  ₹{venue.price} / day
+                </p>
                 <button
                   onClick={() => handleBook(venue)}
-                  className="mt-4 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded"
+                  className="mt-4 bg-[#A67B5B] hover:bg-[#8C6849] text-white px-5 py-2 rounded-full font-medium transition"
                 >
                   Book Now
                 </button>
@@ -155,8 +122,8 @@ export default function Venues() {
             </motion.div>
           ))
         ) : (
-          <p className="text-center col-span-3 text-blue-200">
-            No venues found.
+          <p className="text-center col-span-3 text-[#7A6452]">
+            No venues found or all already booked.
           </p>
         )}
       </div>
