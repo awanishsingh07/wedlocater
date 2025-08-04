@@ -41,12 +41,21 @@ export default function Navbar() {
           >
             Venues
           </Link>
-          <Link
-            to="/dashboard"
-            className="hover:text-[#b28a64] transition duration-200"
-          >
-            Dashboard
-          </Link>
+          {role === "admin" ? (
+            <Link
+              to="/admin"
+              className="hover:text-[#b28a64] transition duration-200"
+            >
+              Admin Dashboard
+            </Link>
+          ) : (
+            <Link
+              to="/dashboard"
+              className="hover:text-[#b28a64] transition duration-200"
+            >
+              Dashboard
+            </Link>
+          )}
           {role === "user" && (
             <Link
               to="/my-bookings"
@@ -79,9 +88,15 @@ export default function Navbar() {
           <Link to="/venues" className="block py-1 hover:text-[#b28a64]">
             Venues
           </Link>
-          <Link to="/dashboard" className="block py-1 hover:text-[#b28a64]">
-            Dashboard
-          </Link>
+          {role === "admin" ? (
+            <Link to="/admin" className="block py-1 hover:text-[#b28a64]">
+              Admin Dashboard
+            </Link>
+          ) : (
+            <Link to="/dashboard" className="block py-1 hover:text-[#b28a64]">
+              Dashboard
+            </Link>
+          )}
           {role === "user" && (
             <Link to="/my-bookings" className="block py-1 hover:text-[#b28a64]">
               My Bookings
