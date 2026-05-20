@@ -1,0 +1,455 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Base Reset & Root ─────────────────────────────── */
+@layer base {
+  :root {
+    --color-ivory: #faf7f2;
+    --color-cream: #f5efe4;
+    --color-maroon: #6b0f1a;
+    --color-gold: #c9a84c;
+    --color-gold-light: #e2c97e;
+    --color-gold-dark: #a8872d;
+    --color-dark: #2b2b2b;
+    --color-muted: #7a7065;
+
+    scroll-behavior: smooth;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: "Inter", sans-serif;
+    background-color: #faf7f2;
+    color: #2b2b2b;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 600;
+    color: #2b2b2b;
+    line-height: 1.15;
+  }
+
+  p {
+    line-height: 1.7;
+    color: #7a7065;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.25s ease;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: none;
+    font-family: "Inter", sans-serif;
+  }
+
+  input,
+  textarea,
+  select {
+    font-family: "Inter", sans-serif;
+    outline: none;
+  }
+
+  ::selection {
+    background-color: rgba(201, 168, 76, 0.25);
+    color: #2b2b2b;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #faf7f2;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #c9a84c;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a8872d;
+  }
+}
+
+/* ─── Reusable Component Layer ──────────────────────── */
+@layer components {
+  /* Buttons */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-maroon text-ivory font-body font-medium
+           px-8 py-3.5 rounded-full text-sm tracking-wide
+           shadow-maroon transition-all duration-300 ease-luxury
+           hover:bg-maroon-dark hover:shadow-lg hover:-translate-y-0.5
+           active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-transparent text-maroon font-body font-medium
+           px-8 py-3.5 rounded-full text-sm tracking-wide
+           border border-maroon transition-all duration-300 ease-luxury
+           hover:bg-maroon hover:text-ivory hover:-translate-y-0.5
+           active:scale-95;
+  }
+
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2
+           bg-gold-gradient text-dark font-body font-semibold
+           px-8 py-3.5 rounded-full text-sm tracking-wide
+           shadow-gold transition-all duration-300 ease-luxury
+           hover:shadow-lg hover:-translate-y-0.5
+           active:scale-95;
+  }
+
+  .btn-outline-gold {
+    @apply inline-flex items-center justify-center gap-2
+           bg-transparent text-gold font-body font-medium
+           px-8 py-3.5 rounded-full text-sm tracking-wide
+           border border-gold transition-all duration-300 ease-luxury
+           hover:bg-gold hover:text-dark hover:-translate-y-0.5
+           active:scale-95;
+  }
+
+  /* Cards */
+  .card-luxury {
+    @apply bg-white rounded-luxury shadow-luxury
+           border border-cream transition-all duration-300 ease-luxury
+           hover:shadow-luxury-md hover:-translate-y-1;
+  }
+
+  .card-cream {
+    @apply bg-cream rounded-luxury shadow-luxury
+           border border-gold/10 transition-all duration-300 ease-luxury
+           hover:shadow-luxury-md hover:-translate-y-1;
+  }
+
+  /* Section wrappers */
+  .section-padding {
+    @apply py-section px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding-sm {
+    @apply py-section-sm px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-luxury {
+    @apply max-w-7xl mx-auto w-full;
+  }
+
+  /* Typography helpers */
+  .heading-display {
+    @apply font-heading text-display-xl text-dark;
+  }
+
+  .heading-xl {
+    @apply font-heading text-display-lg text-dark;
+  }
+
+  .heading-lg {
+    @apply font-heading text-display-md text-dark;
+  }
+
+  .heading-md {
+    @apply font-heading text-display-sm text-dark;
+  }
+
+  .heading-gold {
+    @apply font-heading text-gold;
+  }
+
+  .heading-maroon {
+    @apply font-heading text-maroon;
+  }
+
+  .body-lg {
+    @apply font-body text-lg text-muted leading-relaxed;
+  }
+
+  .body-base {
+    @apply font-body text-base text-muted leading-relaxed;
+  }
+
+  .body-sm {
+    @apply font-body text-sm text-muted;
+  }
+
+  .label-gold {
+    @apply font-body text-xs font-semibold tracking-[0.15em] uppercase text-gold;
+  }
+
+  .label-maroon {
+    @apply font-body text-xs font-semibold tracking-[0.15em] uppercase text-maroon;
+  }
+
+  /* Dividers */
+  .divider-gold {
+    @apply w-16 h-0.5 bg-gold-gradient rounded-full;
+  }
+
+  .divider-center {
+    @apply mx-auto w-16 h-0.5 bg-gold-gradient rounded-full;
+  }
+
+  /* Input fields */
+  .input-luxury {
+    @apply w-full bg-white border border-cream rounded-xl
+           px-4 py-3.5 text-sm font-body text-dark
+           placeholder:text-muted/60
+           focus:border-gold focus:ring-2 focus:ring-gold/20
+           transition-all duration-200;
+  }
+
+  .select-luxury {
+    @apply w-full bg-white border border-cream rounded-xl
+           px-4 py-3.5 text-sm font-body text-dark
+           appearance-none cursor-pointer
+           focus:border-gold focus:ring-2 focus:ring-gold/20
+           transition-all duration-200;
+  }
+
+  /* Badge */
+  .badge-gold {
+    @apply inline-flex items-center gap-1 px-3 py-1
+           bg-gold/10 text-gold-dark text-xs font-semibold
+           rounded-full border border-gold/20;
+  }
+
+  .badge-maroon {
+    @apply inline-flex items-center gap-1 px-3 py-1
+           bg-maroon/10 text-maroon text-xs font-semibold
+           rounded-full border border-maroon/20;
+  }
+
+  /* Overlay */
+  .overlay-hero {
+    @apply absolute inset-0 bg-hero-overlay;
+  }
+
+  /* Gold shimmer text */
+  .text-shimmer {
+    background: linear-gradient(
+      90deg,
+      #c9a84c 0%,
+      #e2c97e 40%,
+      #a8872d 60%,
+      #c9a84c 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+  }
+
+  /* Glass card */
+  .glass-card {
+    @apply backdrop-blur-md bg-white/10 border border-white/20
+           rounded-luxury shadow-luxury;
+  }
+}
+
+/* ─── Utility Layer ─────────────────────────────────── */
+@layer utilities {
+  .transition-luxury {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Safe area for mobile navbar */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* ─── Step 10: Polish & Mobile Fixes ──────────────────── */
+
+  /* Prevent horizontal overflow globally */
+  html,
+  body,
+  #root {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* Ensure images never overflow */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Consistent mobile card sizing */
+  @media (max-width: 640px) {
+    .card-luxury,
+    .card-cream {
+      border-radius: 1rem;
+    }
+
+    /* Mobile-friendly table scroll */
+    .table-scroll-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .table-scroll-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Stack flex rows on tiny screens */
+    .mobile-stack {
+      flex-direction: column !important;
+    }
+
+    /* Full-width buttons on mobile */
+    .mobile-full {
+      width: 100% !important;
+    }
+  }
+
+  /* Touch target minimum size */
+  button,
+  a[role="button"] {
+    min-height: 36px;
+  }
+
+  /* Prevent font scaling on mobile */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Smooth scroll for anchor links */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Better tap highlight */
+  * {
+    -webkit-tap-highlight-color: rgba(201, 168, 76, 0.15);
+  }
+
+  /* Focus ring for accessibility */
+  :focus-visible {
+    outline: 2px solid #c9a84c;
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  /* Prevent text selection on interactive elements */
+  button,
+  [role="button"] {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Gradient text fix for Safari */
+  .text-shimmer {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Line clamp utilities */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  /* Dashboard sidebar mobile z-index */
+  @media (max-width: 1024px) {
+    .dashboard-sidebar-overlay {
+      display: block;
+    }
+  }
+
+  /* Improve mobile input UX */
+  @media (max-width: 640px) {
+    input[type="date"] {
+      min-height: 44px;
+    }
+
+    select {
+      min-height: 44px;
+    }
+  }
+
+  /* Avoid iOS zoom on input focus */
+  @media (max-width: 768px) {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      font-size: 16px !important;
+    }
+  }
+
+  /* Animation performance */
+  .will-animate {
+    will-change: transform, opacity;
+  }
+
+  /* Container query support for cards */
+  .card-container {
+    container-type: inline-size;
+  }
+}
