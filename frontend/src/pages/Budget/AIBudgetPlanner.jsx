@@ -1,17 +1,30 @@
 import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import {
-  RiSparklingLine, RiRobot2Line, RiArrowRightLine,
-  RiDownloadLine, RiRefreshLine, RiCheckboxCircleLine,
-  RiLockLine, RiUserLine, RiBarChart2Line,
-  RiLightbulbLine, RiHeartLine, RiArrowDownLine,
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import {
+  RiSparklingLine,
+  RiRobot2Line,
+  RiArrowRightLine,
+  RiDownloadLine,
+  RiRefreshLine,
+  RiCheckboxCircleLine,
+  RiLockLine,
+  RiUserLine,
+  RiBarChart2Line,
+  RiLightbulbLine,
+  RiHeartLine,
+  RiArrowDownLine,
 } from "react-icons/ri";
 
-import AIBudgetForm          from "../../components/budget/AIBudgetForm";
-import AIRecommendationCard  from "../../components/budget/AIRecommendationCard";
-import AISuggestionCard      from "../../components/budget/AISuggestionCard";
-import { generateAIBudget }  from "../../data/aiBudgetData";
+import AIBudgetForm from "../../components/budget/AIBudgetForm";
+import AIRecommendationCard from "../../components/budget/AIRecommendationCard";
+import AISuggestionCard from "../../components/budget/AISuggestionCard";
+import { generateAIBudget } from "../../data/aiBudgetData";
 
 const FMT = (n) =>
   n >= 100000
@@ -21,31 +34,42 @@ const FMT = (n) =>
 // ── Stagger container ──
 const containerVariants = {
   hidden: {},
-  show:   { transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
 };
 const itemVariants = {
   hidden: { opacity: 0, y: 24 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] } },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] },
+  },
 };
 
 // ── Mini bar chart for summary ──
 function MiniChart({ breakdown, totalBudget }) {
-  const max = Math.max(...breakdown.map(b => b.amount));
+  const max = Math.max(...breakdown.map((b) => b.amount));
   return (
     <div className="flex items-end justify-between gap-1.5 h-20 px-1">
       {breakdown.map((item, i) => {
         const heightPct = (item.amount / max) * 100;
         return (
-          <div key={item.id} className="flex flex-col items-center gap-1 flex-1 min-w-0">
+          <div
+            key={item.id}
+            className="flex flex-col items-center gap-1 flex-1 min-w-0"
+          >
             <motion.div
               initial={{ scaleY: 0 }}
               animate={{ scaleY: 1 }}
-              transition={{ delay: i * 0.07 + 0.5, duration: 0.5, ease: "easeOut" }}
+              transition={{
+                delay: i * 0.07 + 0.5,
+                duration: 0.5,
+                ease: "easeOut",
+              }}
               style={{
-                height:          `${heightPct}%`,
-                background:      item.color,
+                height: `${heightPct}%`,
+                background: item.color,
                 transformOrigin: "bottom",
-                minHeight:       "4px",
+                minHeight: "4px",
               }}
               className="w-full rounded-t-md"
               title={`${item.label}: ${FMT(item.amount)}`}
@@ -62,32 +86,32 @@ function MiniChart({ breakdown, totalBudget }) {
 
 // ── Feature chips for hero ──
 const HERO_FEATURES = [
-  { icon: "🤖", label: "AI Powered"        },
-  { icon: "📊", label: "Smart Allocation"  },
-  { icon: "🏙️", label: "City-Aware"        },
-  { icon: "💎", label: "Style Optimised"   },
-  { icon: "⚡", label: "Instant Results"   },
+  { icon: "🤖", label: "AI Powered" },
+  { icon: "📊", label: "Smart Allocation" },
+  { icon: "🏙️", label: "City-Aware" },
+  { icon: "💎", label: "Style Optimised" },
+  { icon: "⚡", label: "Instant Results" },
 ];
 
 export default function AIBudgetPlanner() {
-  const [loading,     setLoading]     = useState(false);
-  const [result,      setResult]      = useState(null);
-  const [formData,    setFormData]    = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
+  const [formData, setFormData] = useState(null);
   const [highlightId, setHighlightId] = useState(null);
 
   const resultRef = useRef(null);
-  const heroRef   = useRef(null);
+  const heroRef = useRef(null);
 
   const { scrollY } = useScroll();
   const heroOpacity = useTransform(scrollY, [0, 300], [1, 0.4]);
-  const heroY       = useTransform(scrollY, [0, 300], [0, 60]);
+  const heroY = useTransform(scrollY, [0, 300], [0, 60]);
 
   const handleGenerate = async (data) => {
     setLoading(true);
     setResult(null);
 
     // Simulate AI processing delay
-    await new Promise(r => setTimeout(r, 2200));
+    await new Promise((r) => setTimeout(r, 2200));
 
     const aiResult = generateAIBudget(data);
     setFormData(data);
@@ -113,7 +137,6 @@ export default function AIBudgetPlanner() {
 
   return (
     <div className="bg-ivory min-h-screen overflow-x-hidden">
-
       {/* ══════════════════════════════════════════
           HERO SECTION
       ══════════════════════════════════════════ */}
@@ -126,10 +149,11 @@ export default function AIBudgetPlanner() {
         <div className="absolute inset-0 bg-maroon-gradient" />
 
         {/* Dot grid overlay */}
-        <div className="absolute inset-0 opacity-[0.07]"
+        <div
+          className="absolute inset-0 opacity-[0.07]"
           style={{
             backgroundImage: `radial-gradient(circle, #C9A84C 1px, transparent 1px)`,
-            backgroundSize:  "36px 36px",
+            backgroundSize: "36px 36px",
           }}
         />
 
@@ -142,7 +166,12 @@ export default function AIBudgetPlanner() {
         />
         <motion.div
           animate={{ scale: [1, 1.1, 1], opacity: [0.08, 0.15, 0.08] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2,
+          }}
           className="absolute bottom-1/4 -right-24 w-80 h-80 rounded-full
                      bg-maroon-light/30 blur-[80px] pointer-events-none"
         />
@@ -163,7 +192,11 @@ export default function AIBudgetPlanner() {
           >
             <motion.div
               animate={{ rotate: [0, 15, -15, 0] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
             >
               <RiRobot2Line size={16} className="text-gold" />
             </motion.div>
@@ -180,15 +213,18 @@ export default function AIBudgetPlanner() {
             transition={{ delay: 0.15, duration: 0.65 }}
             className="flex flex-col gap-3"
           >
-            <h1 className="font-heading font-semibold text-maroon leading-[1.05]
-                           text-[clamp(2.4rem,6vw,5rem)]">
+            <h1
+              className="font-heading font-semibold text-maroon leading-[1.05]
+                           text-[clamp(2.4rem,6vw,5rem)]"
+            >
               AI Powered Wedding
               <br />
               <em className="not-italic text-shimmer">Budget Planner</em>
             </h1>
             <p className="font-body text-black/80 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
               Tell us your total budget, guest count, city and wedding style -
-              and let our AI craft a smart, personalised spending plan in seconds.
+              and let our AI craft a smart, personalised spending plan in
+              seconds.
             </p>
           </motion.div>
 
@@ -256,20 +292,23 @@ export default function AIBudgetPlanner() {
                   Tell us about your wedding
                 </h2>
                 <p className="font-body text-sm text-muted mt-1">
-                  All fields help us generate a more accurate budget split for you.
+                  All fields help us generate a more accurate budget split for
+                  you.
                 </p>
               </div>
 
               {/* How it works mini-steps */}
               <div className="hidden sm:flex flex-col gap-2 shrink-0 bg-cream/50 rounded-xl p-4 border border-cream">
                 {[
-                  { n: "1", t: "Enter details"    },
+                  { n: "1", t: "Enter details" },
                   { n: "2", t: "AI analyses data" },
-                  { n: "3", t: "Get your plan"    },
-                ].map(s => (
+                  { n: "3", t: "Get your plan" },
+                ].map((s) => (
                   <div key={s.n} className="flex items-center gap-2.5">
-                    <span className="w-5 h-5 rounded-full bg-maroon text-ivory text-[10px]
-                                     font-body font-bold flex items-center justify-center shrink-0">
+                    <span
+                      className="w-5 h-5 rounded-full bg-maroon text-ivory text-[10px]
+                                     font-body font-bold flex items-center justify-center shrink-0"
+                    >
                       {s.n}
                     </span>
                     <span className="font-body text-xs text-muted">{s.t}</span>
@@ -297,14 +336,18 @@ export default function AIBudgetPlanner() {
           >
             <motion.div
               initial={{ scale: 0.85, opacity: 0 }}
-              animate={{ scale: 1,    opacity: 1 }}
+              animate={{ scale: 1, opacity: 1 }}
               className="bg-ivory rounded-luxury-lg shadow-luxury-lg border border-cream
                          p-8 sm:p-12 flex flex-col items-center gap-6 max-w-sm mx-4 text-center"
             >
               {/* Animated robot */}
               <motion.div
                 animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
                 className="w-20 h-20 rounded-full bg-maroon/8 border border-maroon/15
                            flex items-center justify-center"
               >
@@ -386,16 +429,23 @@ export default function AIBudgetPlanner() {
                              border border-cream shadow-luxury p-6 sm:p-8"
                 >
                   {/* Background accent */}
-                  <div className="absolute top-0 right-0 w-64 h-full
-                                  bg-gold-gradient opacity-[0.04] pointer-events-none" />
+                  <div
+                    className="absolute top-0 right-0 w-64 h-full
+                                  bg-gold-gradient opacity-[0.04] pointer-events-none"
+                  />
 
-                  <div className="flex flex-col lg:flex-row items-start
-                                  lg:items-center justify-between gap-6 relative z-10">
+                  <div
+                    className="flex flex-col lg:flex-row items-start
+                                  lg:items-center justify-between gap-6 relative z-10"
+                  >
                     {/* Left: summary */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-3">
                         <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
-                          <RiCheckboxCircleLine size={18} className="text-emerald-600" />
+                          <RiCheckboxCircleLine
+                            size={18}
+                            className="text-emerald-600"
+                          />
                         </div>
                         <p className="label-gold">AI Plan Generated</p>
                       </div>
@@ -406,20 +456,39 @@ export default function AIBudgetPlanner() {
 
                       <div className="flex flex-wrap items-center gap-4 text-sm font-body">
                         <span className="text-muted">
-                          💰 <strong className="text-dark">{FMT(result.summary.totalBudget)}</strong> total
+                          💰{" "}
+                          <strong className="text-dark">
+                            {FMT(result.summary.totalBudget)}
+                          </strong>{" "}
+                          total
                         </span>
                         <span className="text-muted">
-                          👥 <strong className="text-dark">{result.summary.guestCount}</strong> guests
+                          👥{" "}
+                          <strong className="text-dark">
+                            {result.summary.guestCount}
+                          </strong>{" "}
+                          guests
                         </span>
                         <span className="text-muted">
-                          📍 <strong className="text-dark">{result.summary.city}</strong>
+                          📍{" "}
+                          <strong className="text-dark">
+                            {result.summary.city}
+                          </strong>
                         </span>
                         <span className="text-muted">
-                          ✨ <strong className="text-dark capitalize">{result.summary.style}</strong> style
+                          ✨{" "}
+                          <strong className="text-dark capitalize">
+                            {result.summary.style}
+                          </strong>{" "}
+                          style
                         </span>
                         <span className="text-muted">
-                          ~<strong className="text-maroon">
-                            ₹{result.summary.estimatedPerGuest.toLocaleString("en-IN")}
+                          ~
+                          <strong className="text-maroon">
+                            ₹
+                            {result.summary.estimatedPerGuest.toLocaleString(
+                              "en-IN",
+                            )}
                           </strong>{" "}
                           per guest
                         </span>
@@ -481,7 +550,8 @@ export default function AIBudgetPlanner() {
                     </h2>
                   </div>
                   <p className="font-body text-xs text-muted hidden sm:block">
-                    {result.breakdown.length} categories · {FMT(totalSpent)} total
+                    {result.breakdown.length} categories · {FMT(totalSpent)}{" "}
+                    total
                   </p>
                 </div>
 
@@ -496,7 +566,11 @@ export default function AIBudgetPlanner() {
                     <motion.div
                       key={item.id}
                       variants={itemVariants}
-                      onClick={() => setHighlightId(prev => prev === item.id ? null : item.id)}
+                      onClick={() =>
+                        setHighlightId((prev) =>
+                          prev === item.id ? null : item.id,
+                        )
+                      }
                     >
                       <AIRecommendationCard
                         item={item}
@@ -517,19 +591,25 @@ export default function AIBudgetPlanner() {
                              flex flex-wrap items-center justify-between gap-4"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="font-body text-sm text-muted">Total allocated:</span>
+                    <span className="font-body text-sm text-muted">
+                      Total allocated:
+                    </span>
                     <span className="font-heading text-xl font-semibold text-dark">
                       {FMT(totalSpent)}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="font-body text-sm text-muted">Catering per plate estimate:</span>
+                    <span className="font-body text-sm text-muted">
+                      Catering per plate estimate:
+                    </span>
                     <span className="font-heading text-base font-semibold text-maroon">
                       ₹{result.summary.perPlate.toLocaleString("en-IN")}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="font-body text-sm text-muted">City cost factor:</span>
+                    <span className="font-body text-sm text-muted">
+                      City cost factor:
+                    </span>
                     <span className="font-heading text-base font-semibold text-gold-dark">
                       {result.summary.multiplier.toFixed(2)}×
                     </span>
@@ -553,12 +633,17 @@ export default function AIBudgetPlanner() {
                         <p className="label-gold">AI Insights</p>
                       </div>
                       <h2 className="font-heading text-display-sm text-dark">
-                        Smart Money-Saving Tips
+                        Smart Money Saving Tips
                       </h2>
                       <p className="font-body text-sm text-muted mt-1">
                         Tailored suggestions for a{" "}
-                        <strong className="text-dark capitalize">{result.summary.style}</strong>{" "}
-                        wedding in <strong className="text-dark">{result.summary.city}</strong>
+                        <strong className="text-dark capitalize">
+                          {result.summary.style}
+                        </strong>{" "}
+                        wedding in{" "}
+                        <strong className="text-dark">
+                          {result.summary.city}
+                        </strong>
                       </p>
                     </div>
                   </div>
@@ -590,7 +675,9 @@ export default function AIBudgetPlanner() {
 
                   <div className="flex flex-col gap-3.5">
                     {result.breakdown.map((item, i) => {
-                      const pct = Math.round((item.amount / result.summary.totalBudget) * 100);
+                      const pct = Math.round(
+                        (item.amount / result.summary.totalBudget) * 100,
+                      );
                       return (
                         <motion.div
                           key={item.id}
@@ -602,7 +689,9 @@ export default function AIBudgetPlanner() {
                           {/* Icon + label */}
                           <div className="flex items-center gap-2 w-36 sm:w-44 shrink-0">
                             <span className="text-base">{item.icon}</span>
-                            <span className="font-body text-xs text-dark truncate">{item.label}</span>
+                            <span className="font-body text-xs text-dark truncate">
+                              {item.label}
+                            </span>
                           </div>
 
                           {/* Bar */}
@@ -610,7 +699,11 @@ export default function AIBudgetPlanner() {
                             <motion.div
                               initial={{ width: 0 }}
                               animate={{ width: `${pct}%` }}
-                              transition={{ delay: i * 0.07 + 0.5, duration: 0.8, ease: "easeOut" }}
+                              transition={{
+                                delay: i * 0.07 + 0.5,
+                                duration: 0.8,
+                                ease: "easeOut",
+                              }}
                               className="h-full rounded-full transition-all duration-300"
                               style={{
                                 background: `linear-gradient(90deg, ${item.color}, ${item.color}88)`,
@@ -620,7 +713,9 @@ export default function AIBudgetPlanner() {
 
                           {/* Values */}
                           <div className="flex items-center gap-2 w-28 sm:w-36 shrink-0 justify-end">
-                            <span className="font-body text-xs text-muted">{pct}%</span>
+                            <span className="font-body text-xs text-muted">
+                              {pct}%
+                            </span>
                             <span className="font-heading text-sm font-semibold text-dark">
                               {FMT(item.amount)}
                             </span>
@@ -644,23 +739,33 @@ export default function AIBudgetPlanner() {
                              p-8 sm:p-12 text-center"
                 >
                   {/* Background pattern */}
-                  <div className="absolute inset-0 opacity-[0.07]"
+                  <div
+                    className="absolute inset-0 opacity-[0.07]"
                     style={{
                       backgroundImage: `radial-gradient(circle, #C9A84C 1px, transparent 1px)`,
-                      backgroundSize:  "32px 32px",
-                    }} />
+                      backgroundSize: "32px 32px",
+                    }}
+                  />
 
                   {/* Glow orbs */}
-                  <div className="absolute top-0 left-1/4 w-64 h-64 rounded-full
-                                  bg-gold/10 blur-[80px] pointer-events-none" />
-                  <div className="absolute bottom-0 right-1/4 w-48 h-48 rounded-full
-                                  bg-maroon-light/20 blur-[60px] pointer-events-none" />
+                  <div
+                    className="absolute top-0 left-1/4 w-64 h-64 rounded-full
+                                  bg-gold/10 blur-[80px] pointer-events-none"
+                  />
+                  <div
+                    className="absolute bottom-0 right-1/4 w-48 h-48 rounded-full
+                                  bg-maroon-light/20 blur-[60px] pointer-events-none"
+                  />
 
                   <div className="relative z-10 flex flex-col items-center gap-6 max-w-xl mx-auto">
                     {/* Heart icon */}
                     <motion.div
                       animate={{ scale: [1, 1.12, 1] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
                       className="w-16 h-16 rounded-full bg-white/10 border border-white/20
                                  flex items-center justify-center"
                     >
@@ -669,12 +774,13 @@ export default function AIBudgetPlanner() {
 
                     <div className="flex flex-col gap-2">
                       <p className="label-gold !text-gold/80">Save Your Plan</p>
-                      <h3 className="font-heading text-display-md text-ivory">
+                      <h3 className="font-heading text-display-md text-maroon/80">
                         Want to save your personalised budget plan?
                       </h3>
-                      <p className="font-body text-ivory/60 text-sm leading-relaxed max-w-md mx-auto">
-                        Create a free account to save this AI plan, track your spending,
-                        manage vendors and access your complete wedding dashboard.
+                      <p className="font-body text-black/70 text-sm leading-relaxed max-w-md mx-auto">
+                        Create a free account to save this AI plan, track your
+                        spending, manage vendors and access your complete
+                        wedding dashboard.
                       </p>
                     </div>
 
@@ -686,12 +792,12 @@ export default function AIBudgetPlanner() {
                         "📋 Manage vendors",
                         "👥 Guest list",
                         "✅ Checklist",
-                      ].map(f => (
+                      ].map((f) => (
                         <span
                           key={f}
                           className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full
                                      bg-white/10 backdrop-blur-sm border border-white/15
-                                     font-body text-xs text-ivory/80"
+                                     font-body text-xs text-yellow/80"
                         >
                           {f}
                         </span>
@@ -714,8 +820,9 @@ export default function AIBudgetPlanner() {
                       <Link
                         to="/login"
                         className="inline-flex items-center justify-center gap-2
-                                   px-8 py-3.5 rounded-full font-body text-sm font-medium
-                                   bg-white/10 backdrop-blur-sm border border-white/25 text-ivory
+                                   px-8 py-3.5 rounded-full font-body text-sm font-semibold
+                                   bg-white/10 backdrop-blur-sm border border-white/25 text-dark
+                                   shadow-lg bg-gold-gradient shadow-gold
                                    hover:bg-white/20 hover:-translate-y-0.5
                                    transition-all duration-300 min-w-[160px]"
                       >
@@ -724,14 +831,13 @@ export default function AIBudgetPlanner() {
                       </Link>
                     </div>
 
-                    <p className="font-body text-[11px] text-ivory/30">
+                    <p className="font-body text-[11px] text-creme/30">
                       Free forever · No credit card required · Cancel anytime
                     </p>
                   </div>
                 </motion.div>
               </div>
             </section>
-
           </motion.div>
         )}
       </AnimatePresence>
@@ -750,19 +856,19 @@ export default function AIBudgetPlanner() {
             >
               {[
                 {
-                  icon:  "🤖",
+                  icon: "🤖",
                   title: "AI-Powered Analysis",
-                  desc:  "Our AI engine analyses your budget against real wedding cost data across Indian cities and wedding styles.",
+                  desc: "Our AI engine analyses your budget against real wedding cost data across Indian cities and wedding styles.",
                 },
                 {
-                  icon:  "📊",
+                  icon: "📊",
                   title: "Smart Allocation",
-                  desc:  "Get category-wise budget splits optimised for your guest count, venue type and wedding style preferences.",
+                  desc: "Get category-wise budget splits optimised for your guest count, venue type and wedding style preferences.",
                 },
                 {
-                  icon:  "💡",
+                  icon: "💡",
                   title: "Expert Suggestions",
-                  desc:  "Receive personalised money-saving tips and planning advice from our AI trained on thousands of Indian weddings.",
+                  desc: "Receive personalised money-saving tips and planning advice from our AI trained on thousands of Indian weddings.",
                 },
               ].map((f, i) => (
                 <motion.div
@@ -774,15 +880,18 @@ export default function AIBudgetPlanner() {
                              hover:shadow-luxury-md hover:-translate-y-1 transition-all duration-300"
                 >
                   <span className="text-3xl mb-3 block">{f.icon}</span>
-                  <h3 className="font-heading text-base font-semibold text-dark mb-2">{f.title}</h3>
-                  <p className="font-body text-xs text-muted leading-relaxed">{f.desc}</p>
+                  <h3 className="font-heading text-base font-semibold text-dark mb-2">
+                    {f.title}
+                  </h3>
+                  <p className="font-body text-xs text-muted leading-relaxed">
+                    {f.desc}
+                  </p>
                 </motion.div>
               ))}
             </motion.div>
           </div>
         </section>
       )}
-
     </div>
   );
 }

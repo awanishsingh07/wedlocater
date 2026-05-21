@@ -82,8 +82,8 @@ export default function Footer() {
               <input
                 type="email"
                 placeholder="Your email address"
-                className="input-luxury !bg-white/8 !border-white/15 !text-ivory
-                           placeholder:!text-ivory/40 focus:!border-gold
+                className="input-luxury !bg-white/8 !border-white/15 !text-black
+                           placeholder:!text-creme/50 focus:!border-gold
                            min-w-0 sm:min-w-[280px]"
               />
               <button className="btn-gold !whitespace-nowrap shrink-0">
@@ -121,7 +121,7 @@ export default function Footer() {
             <p className="text-sm text-ivory/50 leading-relaxed max-w-xs mb-8">
               India's most trusted AI-powered wedding planning platform.
               Discover premium venues, curated vendors, and create your dream
-              wedding — all in one place.
+              wedding - all in one place.
             </p>
 
             {/* Contact details */}
