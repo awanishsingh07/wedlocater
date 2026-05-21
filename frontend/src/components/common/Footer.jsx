@@ -17,8 +17,8 @@ const FOOTER_LINKS = {
     { label: "Venue Booking", path: "/venues" },
     { label: "Vendor Directory", path: "/vendors" },
     { label: "Photographers", path: "/photographers" },
-    { label: "Budget Planner", path: "/budget" },
-    { label: "AI Suggestions", path: "/" },
+    { label: "AI Budget Planner", path: "/ai-budget" },
+    { label: "Wedding Planning", path: "/" },
   ],
   Company: [
     { label: "About Us", path: "/" },

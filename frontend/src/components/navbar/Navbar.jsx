@@ -14,7 +14,7 @@ const NAV_LINKS = [
   { label: "Venues",        path: "/venues" },
   { label: "Vendors",       path: "/vendors" },
   { label: "Photographers", path: "/photographers" },
-  { label: "Budget Planner",path: "/budget" },
+  { label: "AI Budget Planner",path: "/ai-budget" },
 ];
 
 const MOBILE_EXTRAS = [

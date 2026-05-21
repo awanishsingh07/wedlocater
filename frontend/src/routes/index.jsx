@@ -52,8 +52,8 @@ export default function AppRoutes() {
       {/* ── User / planning ── */}
       <Route element={<DashboardLayout role="user" user={MOCK_USER} />}>
         <Route path="/dashboard" element={<Wrap><UserDashboard /></Wrap>}  />
-        <Route path="/budget"    element={<Wrap><BudgetPlanner /></Wrap>}  />
-        <Route path="/checklist" element={<Wrap><Checklist /></Wrap>}      />
+        <Route path="/dashboard/budget"    element={<Wrap><BudgetPlanner /></Wrap>}  />
+        <Route path="/dashboard/checklist" element={<Wrap><Checklist /></Wrap>}      />
         {/* <Route path="/guests"    element={<Wrap><Guests /></Wrap>}         /> */}
       </Route>
 

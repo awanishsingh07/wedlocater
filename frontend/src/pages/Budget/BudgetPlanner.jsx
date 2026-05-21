@@ -56,7 +56,7 @@ export default function BudgetPlanner() {
                 <RiWalletLine className="inline mr-1" size={12} />
                 Wedding Finance
               </p>
-              <h1 className="font-heading text-display-md text-maroon/80 mb-2">Budget Planner</h1>
+              <h1 className="font-heading text-display-md text-maroon/80 mb-2">Budget Tracker</h1>
               <p className="font-body text-creme/60 text-sm max-w-md">
                 Track every rupee of your wedding budget across categories, monitor spending
                 and stay in control of your big day finances.
