@@ -16,6 +16,7 @@ const Photographers       = lazy(() => import("../pages/Photographer/Photographe
 const PhotographerDetails = lazy(() => import("../pages/Photographer/PhotographerDetails"));
 const Vendors             = lazy(() => import("../pages/Vendors/Vendors"));
 const VendorDetails       = lazy(() => import("../pages/Vendors/VendorDetails"));
+const AIBudgetPlanner = lazy(() => import("../pages/Budget/AIBudgetPlanner"));
 const BudgetPlanner       = lazy(() => import("../pages/Budget/BudgetPlanner"));
 const Checklist           = lazy(() => import("../pages/Checklist/Checklist"));
 // const Guests              = lazy(() => import("../pages/Guests/Guests"));
@@ -41,6 +42,7 @@ export default function AppRoutes() {
         <Route path="/"                  element={<Wrap><Home /></Wrap>}                />
         <Route path="/venues"            element={<Wrap><Venues /></Wrap>}              />
         <Route path="/venues/:id"        element={<Wrap><VenueDetails /></Wrap>}        />
+        <Route path="/ai-budget" element={<Wrap><AIBudgetPlanner /></Wrap>}             />
         <Route path="/photographers"     element={<Wrap><Photographers /></Wrap>}       />
         <Route path="/photographers/:id" element={<Wrap><PhotographerDetails /></Wrap>} />
         <Route path="/vendors"           element={<Wrap><Vendors /></Wrap>}             />
