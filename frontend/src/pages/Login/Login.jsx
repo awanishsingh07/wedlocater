@@ -11,13 +11,14 @@ import {
 } from "react-icons/ri";
 import useFormValidation, { VALIDATORS } from "../../hooks/useFormValidation";
 import FormField from "../../components/forms/FormField";
+import { authService } from "../../services/authService";
 
 const RULES = {
-  email:    [VALIDATORS.required, VALIDATORS.email],
+  email: [VALIDATORS.required, VALIDATORS.email],
   password: [VALIDATORS.required, VALIDATORS.minLen(6)],
 };
 
-const INIT = { email: "", password: "", remember: false };
+const INIT = { email: "", password: "", adminCode: "", remember: false };
 
 // Stagger variants
 const container = {
@@ -26,13 +27,14 @@ const container = {
 };
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] } },
 };
 
 export default function Login() {
   const navigate = useNavigate();
-  const [loading, setLoading]   = useState(false);
+  const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const { values, errors, touched, handleChange, handleBlur, validateAll } =
     useFormValidation(INIT, RULES);
@@ -42,10 +44,17 @@ export default function Login() {
     setApiError("");
     if (!validateAll()) return;
     setLoading(true);
-    // Simulate API call
-    await new Promise(r => setTimeout(r, 1500));
-    setLoading(false);
-    navigate("/dashboard");
+
+    try {
+      const res = await authService.login(values.email, values.password, values.adminCode);
+      setLoading(false);
+      if (res.role === "admin") navigate("/admin/dashboard");
+      else if (res.role === "vendor") navigate("/vendor/dashboard");
+      else navigate("/dashboard");
+    } catch (error) {
+      setLoading(false);
+      setApiError(error);
+    }
   };
 
   return (
@@ -175,26 +184,7 @@ export default function Login() {
             </p>
           </motion.div>
 
-          {/* Google OAuth */}
-          <motion.button
-            variants={fadeUp}
-            type="button"
-            className="w-full flex items-center justify-center gap-3
-                       px-5 py-3.5 rounded-xl border border-cream bg-white
-                       text-sm font-body font-medium text-dark
-                       shadow-luxury hover:shadow-luxury-md hover:-translate-y-0.5
-                       transition-all duration-200 mb-6"
-          >
-            <RiGoogleFill size={18} className="text-[#EA4335]" />
-            Continue with Google
-          </motion.button>
 
-          {/* Divider */}
-          <motion.div variants={fadeUp} className="flex items-center gap-3 mb-6">
-            <div className="flex-1 h-px bg-cream" />
-            <span className="text-xs text-muted font-body px-1">or sign in with email</span>
-            <div className="flex-1 h-px bg-cream" />
-          </motion.div>
 
           {/* API error */}
           {apiError && (
@@ -249,17 +239,30 @@ export default function Login() {
               />
             </motion.div>
 
-            {/* Remember + Forgot */}
             <motion.div variants={fadeUp}
               className="flex items-center justify-between gap-4">
-              <FormField
-                name="remember"
-                type="checkbox"
-                value={values.remember}
-                onChange={handleChange}
-              >
-                Remember me
-              </FormField>
+              <div className="flex flex-col gap-2">
+                <FormField
+                  name="remember"
+                  type="checkbox"
+                  value={values.remember}
+                  onChange={handleChange}
+                >
+                  Remember me
+                </FormField>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="isAdmin"
+                    checked={isAdmin}
+                    onChange={(e) => setIsAdmin(e.target.checked)}
+                    className="w-4 h-4 rounded border-cream text-maroon focus:ring-maroon"
+                  />
+                  <label htmlFor="isAdmin" className="text-xs font-body text-dark">
+                    Login as Admin
+                  </label>
+                </div>
+              </div>
               <Link
                 to="/forgot-password"
                 className="text-xs font-body text-maroon hover:text-gold
@@ -268,6 +271,21 @@ export default function Login() {
                 Forgot password?
               </Link>
             </motion.div>
+
+            {isAdmin && (
+              <motion.div variants={fadeUp}>
+                <FormField
+                  label="Admin Code"
+                  name="adminCode"
+                  type="password"
+                  value={values.adminCode}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="Enter special admin code"
+                  icon={RiShieldCheckLine}
+                />
+              </motion.div>
+            )}
 
             {/* Submit */}
             <motion.div variants={fadeUp} className="pt-2">
